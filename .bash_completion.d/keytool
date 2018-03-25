@@ -1,0 +1,190 @@
+# Bash Completion snippet for the keytool command
+
+_keytool_options() {
+    keytool $1 -help 2>&1 |
+    sed -re '/^\s+-/!d; s/\s*(-[a-z]+).*/\1/; s/-[a-z]+pass\>/&\n&:env\n&:file/'
+}
+
+have keytool &&
+_keytool() {
+
+    local cur prev opt main
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    # options of first level
+    local opts="-certreq -changealias -delete -exportcert -genkeypair -genseckey -gencert -importcert -importpass -importkeystore -keypasswd -list -printcert -printcertreq -printcrl -storepasswd"
+
+    [ $COMP_CWORD -gt 1 ] &&
+    for opt in ${COMP_WORDS[@]}; do
+        case "$opt" in
+            -*)
+                echo "$opts" | grep -qowe "$opt" || continue
+                main="$opt"
+                break
+                ;;
+            *)
+                continue
+                ;;
+        esac
+    done
+
+    case "$prev" in
+        #-certreq|-changealias|-delete|-exportcert|-genkeypair|-genseckey|-gencert|-importcert|-importpass|-importkeystore|-keypasswd|-list|-printcert|-printcertr)
+        #    opts="$(_keytool_options $prev)"
+        #    COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+        #    return 0
+        #    ;;
+        keytool)
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -certreq)
+            opts="-alias -sigalg -file -keypass -keystore -dname -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -changealias)
+            opts="-alias -destalias -keypass -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -delete)
+            opts="-alias -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -exportcert)
+            opts="-rfc -alias -file -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -genkeypair)
+            opts="-alias -keyalg -keysize -sigalg -destalias -dname -startdate -ext -validity -keypass -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -genseckey)
+            opts="-alias -keypass -keyalg -keysize -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -gencert)
+            opts="-rfc -infile -outfile -alias -sigalg -dname -startdate -ext -validity -keypass -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -importcert)
+            opts="-noprompt -trustcacerts -alias -file -keypass -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -importpass)
+            opts="-alias -keypass -keyalg -keysize -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -importkeystore)
+            opts="-srckeystore -destkeystore -srcstoretype -deststoretype -srcstorepass -deststorepass -srcprotected -srcprovidername -destprovidername -srcalias -destalias -srckeypass -destkeypass -noprompt -providerclass -providerarg -providerpath -v"
+            opts="$opts -destkeypass:env -destkeypass:file -deststorepass:env -deststorepass:file -srckeypass:env -srckeypass:file -srcstorepass:env -srcstorepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -keypasswd)
+            opts="-alias -keypass -new -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v"
+            opts="$opts -keypass:env -keypass:file -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -list)
+            opts="-rfc -alias -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v -protected"
+            opts="$opts -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -printcert)
+            opts="-rfc -file -sslserver -jarfile -v"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -printcertreq)
+            opts="-file -v"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -printcrl)
+            opts="-file -v"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -storepasswd)
+            opts="-new -keystore -storepass -storetype -providername -providerclass -providerarg -providerpath -v"
+            opts="$opts -storepass:env -storepass:file"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -file|-infile|-outfile|-jarfile|-keystore|-srckeystore|-destkeystore|-trustcacerts)
+            _filedir
+            return 0
+            ;;
+        -keypass:file|-srckeypass:file|-destkeypass:file|-storepass:file|-srcstorepass:file|-deststorepass:file)
+            _filedir
+            return 0
+            ;;
+        -keypass|-srckeypass|-destkeypass|-storepass|-srcstorepass|-deststorepass)
+            return 0
+            ;;
+        -storetype|-srcstoretype|-deststoretype)
+            opts="JKS JCEKS PKCS11 PKCS12"
+            COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+            return 0
+            ;;
+        -alias|-srcalias|-destalias)
+            return 0
+            ;;
+        -noprompt|-v|-rfc)
+            opts="$(_keytool_options $main)"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        -sslserver)
+            _known_hosts_real "$cur"
+            return 0
+            ;;
+        -*)
+            ;;
+        *)
+            opts="$(_keytool_options $main)"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+    esac
+
+    case "$cur" in
+        -*)
+            opts="$(_keytool_options $main)"
+            COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
+            return 0
+            ;;
+        *)
+            _filedir
+            return 0
+            ;;
+    esac
+
+}
+
+[ "$have" ] && complete -F _keytool -o filenames keytool
+
+# vim: ft=sh et ts=4 sts=4 sw=4

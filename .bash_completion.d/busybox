@@ -1,0 +1,44 @@
+# Bash Completion snippet for the busybox command
+
+have busybox &&
+_busybox() {
+
+    local cur prev opts
+
+    # find all really available applets (builtins or internal commands)
+    local commands=$(busybox --list)
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$cur" in
+        -*)
+            case "$prev" in
+                busybox)
+                    opts="--list --list-full --install" ;;
+                [a-z]*)
+                    opts="$(busybox $prev --help 2>&1 | grep -owEe '--?[a-z]+[-a-z]*')" ;;
+                *)
+                    opts="" ;;
+            esac
+            COMPREPLY=( $(compgen -W "$opts --help" -- "$cur") )
+            return 0
+        ;;
+    esac
+
+    case "$prev" in
+        busybox)
+            COMPREPLY=( $(compgen -W "$commands" -- "$cur") )
+            return 0
+            ;;
+        *)
+            COMPREPLY=( $(compgen -f -- "$cur" ) )
+            return 0
+            ;;
+    esac
+}
+
+[ "$have" ] && complete -F _busybox -o default busybox
+
+# vim: ft=sh et ts=4 sts=4 sw=4

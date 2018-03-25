@@ -1,0 +1,13 @@
+# ~/.bash_completion
+# This file should probably not be sourced directly from bashrc. Turn on
+# completion and install bash-completion, then it will be sourced from
+# /usr/share/bash-completion/bash_completion with environment and functions
+# properly set.
+if [[ -d ~/.bash_completion.d ]]; then
+    for i in ~/bash_completion.d/*; do
+        [[ -f $i && -r $i ]] && . "$i"
+    done
+    unset i
+fi
+
+# ex: ts=4 sw=4 et filetype=sh
