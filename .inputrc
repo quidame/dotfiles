@@ -1,0 +1,372 @@
+# ~/.inputrc
+
+## INCLUDE SYSTEM INPUTRC ==================================================={{{
+#
+# If ~/.inputrc (or the file defined by the environment variable 'INPUTRC')
+# exists and is readable, the system configuration file /etc/inputrc is not
+# taken into account. It is possible to use system settings by including the
+# system file (or any other) from the custom file, with the '$include'
+# directive. So, uncomment the line below if you want to include system
+# inputrc settings:
+#
+#$include /etc/inputrc
+## ==========================================================================}}}
+
+## SET READLINE VARIABLES ==================================================={{{
+#
+# blink-matching-paren {{{
+# This variable is only available in 'emacs' mode. If set to 'on', blink the
+# opening parenthesis (or bracket) when the corresponding closing one is
+# inserted.
+# Default is 'off'. }}}
+$if mode=emacs
+  set blink-matching-paren on
+$endif
+#
+# byte-oriented ============================================================={{{
+# }}}
+#set byte-oriented off
+#
+# colored-stats ============================================================={{{
+# If set to 'on', readline displays possible completions using different colors
+# to indicate their filetype. The color definitions are taken from the value of
+# the LS_COLORS environment variable.
+# Default is 'off'. }}}
+#set colored-stats off
+#
+# completion-ignore-case {{{
+# If set to 'on', readline performs filename matching and completion in a
+# case-insensitive fashion.
+# Default is 'off'. }}}
+set completion-ignore-case on
+#
+# completion-map-case ======================================================={{{
+# If set to 'on', and COMPLETION-IGNORE-CASE is enabled, Readline treats
+# hyphens ('-') and underscores ('_') as equivalent when performing
+# case-insensitive filename matching and completion.
+# Default is 'off'. }}}
+#set completion-map-case off
+#
+# convert-meta {{{
+# If set to 'on', readline will convert characters with the eighth bit set to
+# an ASCII key sequence by stripping the eighth bit and prefixing an escape
+# character (in effect, using escape as the meta prefix).
+# Default is 'on'. }}}
+set convert-meta off
+#
+# disable-completion {{{
+# If set to 'on', readline will inhibit word completion. Completion characters
+# will be inserted into the line as if they had been mapped to self-insert.
+# Default is 'off' }}}
+#set disable-completion off
+#
+# echo-control-characters {{{
+# When set to 'on', on operating systems that indicate they support it,
+# readline echoes a character corresponding to a signal generated from the
+# keyboard.
+# Default is 'on'. }}}
+#set echo-control-characters on
+#
+# enable-keypad {{{
+# When set to 'on', readline will try to enable the application keypad when it
+# is called. Some systems need this to enable the arrow keys.
+# Default is 'off'. }}}
+#set enable-keypad off
+#
+# enable-meta-key {{{
+# When set to 'on', readline will try to enable any meta modifier key the
+# terminal claims to support when it is called. On many terminals, the meta
+# key is used to send eight-bit characters.
+# Default is 'on'. }}}
+#set enable-meta-key on
+#
+# expand-tilde {{{
+# If set to 'on', tilde expansion is performed when readline attempts word
+# completion.
+# Default is 'off'. }}}
+#set expand-tilde off
+#
+# history-preserve-point {{{
+# If set to 'on', the history code attempts to place point at the same location
+# on each history line retrieved with 'previous-history' or 'next-history'.
+# Default is 'off'. }}}
+set history-preserve-point on
+#
+# history-size {{{
+# Set the maximum number of history entries saved in the history list. If set
+# to less than zero, the number of entries in the history list is not limited.
+# Default is unset. }}}
+set history-size -1
+#
+# horizontal-scroll-mode {{{
+# When set to 'on', makes readline use a single line for display, scrolling
+# the input horizontally on a single screen line when it becomes longer than
+# the screen width rather than wrapping to a new line.
+# Default is 'off'. }}}
+#set horizontal-scroll-mode off
+#
+# input-meta {{{
+# If set to 'on', readline will enable eight-bit input (that is, it will not
+# strip the high bit from the characters it reads), regardless of what the
+# terminal claims it can support. The name 'meta-flag' is a synonym for this
+# variable.
+# Default is 'off'. }}}
+set input-meta on
+#
+# isearch-terminators {{{
+# The string of characters that should terminate an incremental search without
+# subsequently executing the character as a command. If this variable has not
+# been given a value, the characters ESC and C-J will terminate an incremental
+# search.
+# Default is 'C-[C-J'. }}}
+#set isearch-terminators C-[C-J
+#
+# mark-directories {{{
+# If set to 'on', completed directory names have a slash appended.
+# Default is 'on'. }}}
+set mark-directories on
+#
+# mark-modified-lines {{{
+# If set to 'on', history lines that have been modified are displayed with a
+# preceding asterisk (*).
+# Default is 'off'. }}}
+#set mark-modified-lines off
+#
+# mark-symlinked-directories {{{
+# If set to 'on', completed names which are symbolic links to directories have
+# a slash appended (subject to the value of 'mark-directories').
+# Default is 'off'. }}}
+set mark-symlinked-directories on
+#
+# match-hidden-files {{{
+# When set to 'on', this variable causes readline to match files whose names
+# begin with a '.' (hidden files) when performing filename completion, unless
+# the leading '.' is supplied by the user in the filename to be completed.
+# Default is 'on'. }}}
+#set match-hidden-files on
+#
+# menu-complete-display-prefix =============================================={{{
+# If set to 'on', menu completion displays the common prefix of the list of
+# possible completions (which may be empty) before cycling through the list.
+# Default is 'off'. }}}
+#set menu-complete-display-prefix off
+#
+# meta-flag {{{
+# Synonymous for 'input-meta'. }}}
+#set meta-flag on
+#
+# output-meta {{{
+# If set to 'on', readline will display characters with the eighth bit set
+# directly rather than as a meta-prefixed escape sequence.
+# Default is 'off'. }}}
+set output-meta on
+#
+# page-completions {{{
+# If set to 'on', readline uses an internal more-like pager to display a
+# screenful of possible completions at a time.
+# Default is 'on'. }}}
+#set page-completions on
+#
+# prefer-visible-bell ======================================================={{{
+# Seems to be deprecated; see 'bell-style' below...
+# Default is 'on'. }}}
+#set prefer-visible-bell on
+#
+# print-completions-horizontally {{{
+# If set to 'on', readline will display completions with matches sorted
+# horizontally in alphabetical order, rather than down the screen.
+# Default is 'off'. }}}
+#set print-completions-horizontally off
+#
+# revert-all-at-newline {{{
+# If set to 'on', readline will undo all changes to history lines before
+# returning when 'accept-line' is executed. By default, history lines may be
+# modified and retain individual undo lists across calls to readline.
+# Default is 'off'. }}}
+#set revert-all-at-newline off
+#
+# show-all-if-ambiguous {{{
+# This alters the default behavior of the completion functions. If set to 'on',
+# words which have more than one possible completion cause the matches to be
+# listed immediately instead of ringing the bell.
+# Default is 'off'. }}}
+#set show-all-if-ambiguous off
+#
+# show-all-if-unmodified {{{
+# This alters the default behavior of the completion functions in a fashion
+# similar to 'show-all-if-ambiguous'. If set to 'on', words which have more
+# than one possible completion without any possible partial completion (the
+# possible completions don't share a common prefix) cause the matches to be
+# listed immediately instead of ringing the bell.
+# Default is 'off'. }}}
+#set show-all-if-unmodified off
+#
+# skip-completed-text {{{
+# If set to 'on', this alters the default completion behavior when inserting a
+# single match into the line. It's only active when performing completion in
+# the middle of a word. If enabled, readline does not insert characters from
+# the completion that match characters after point in the word being completed,
+# so portions of the word following the cursor are not duplicated.
+# Default is 'off'. }}}
+set skip-completed-text on
+#
+# visible-stats {{{
+# If set to 'on', a character denoting a file's type as reported by stat(2) is
+# appended to the filename when listing possible completions.
+# Default is 'off'. }}}
+set visible-stats on
+#
+# bell-style {{{
+# Controls what happens when readline wants to ring the terminal bell. If set to
+# 'none', readline never rings the bell. If set to 'visible', readline uses a
+# visible bell if one is available. If set to 'audible', readline attempts to
+# ring the terminal's bell. This overrides the 'prefer-visible-bell' variable.
+# Default is 'audible'. }}}
+set bell-style none
+#
+# comment-begin {{{
+# The string that is inserted when the readline 'insert-comment' command is
+# executed. This command is bound to M-# in emacs mode and to # in vi command
+# mode.
+# Default is '#'. }}}
+#set comment-begin #
+#
+# completion-display-width =================================================={{{
+# The number of screen columns used to display possible matches when performing
+# completion. The value is ignored if it is less than 0 or greater than the
+# terminal screen width. A value of 0 will cause matches to be displayed one
+# per line.
+# Default is '-1'. }}}
+#set completion-display-width -1
+#
+# completion-prefix-display-length {{{
+# The length in characters of the common prefix of a list of possible
+# completions that is displayed without modification. When set to a value
+# greater than zero, common prefixes longer than this value are replaced with
+# an ellipsis when displaying possible completions.
+# Default is '0'. }}}
+#set completion-prefix-display-length 0
+#
+# completion-query-items {{{
+# This determines when the user is queried about viewing the number of possible
+# completions generated by the 'possible-completions' command. It may be set to
+# any integer value greater than or equal to zero. If the number of possible
+# completions is greater than or equal to the value of this variable, the user
+# is asked whether or not she wishes to view them; otherwise they are simply
+# listed on the terminal.
+# Default is '100'. }}}
+#set completion-query-items 100
+#
+# editing-mode {{{
+# Controls whether readline begins with a set of key bindings similar to emacs
+# or vi. editing-mode can be set to either emacs or vi.
+# Default is 'emacs'. }}}
+#set editing-mode emacs
+#
+# keymap {{{
+# Set the current readline keymap. The set of valid keymap names is 'emacs',
+# 'emacs-standard', 'emacs-meta', 'emacs-ctlx', 'vi', 'vi-command', and
+# 'vi-insert'. 'vi' is equivalent to 'vi-command'; 'emacs' is equivalent to
+# 'emacs-standard'. The value of 'editing-mode' also affects the default keymap.
+# Default is 'emacs'. }}}
+#set keymap emacs
+#
+## ==========================================================================}}}
+
+## MAP READLINE FUNCTIONS ==================================================={{{
+#
+# If you modify this file, you can reload it on the fly instead of disconnect
+# and reconnect. The default keys to do that are <Ctrl-X><Ctrl-R> ():
+"\C-x\C-r": re-read-init-file
+#
+# Behaviour of the TAB key:
+"\C-i": complete
+# If you prefer, use this:
+#"\C-i": menu-complete
+# Then, if you want to bind 'menu-complete-backward' to <Shift-Tab>, this may
+# be done automatically by remapping keys, like ($if Bash):
+#"\e[Z": "\e-1\C-i"
+#
+# tell the shell to expand the line (variables, command substitutions...)
+# with <Ctrl-X><Ctrl-X> ():
+"\C-x\C-x": shell-expand-line
+#
+# <Alt-L> do the same than <Ctrl-L> ():
+#"\el": clear-screen
+#
+# [Ctrl & <-] and [Ctrl & ->]:
+"\e[1;5D": beginning-of-line
+"\e[1;5C": end-of-line
+#
+# mappings for "up" and "down" arrows to search the history
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+#
+# <Alt> with right or left arrows:
+#"\e[1;3D": menu-complete-backward
+#"\e[1;3C": menu-complete
+## ==========================================================================}}}
+
+## DEFINE READLINE MACROS ==================================================={{{
+#
+# NOTE to build a macro: {{{
+# - At first, choose what action you want to do with what keys combination.
+# - Find if the action you want to execute is a readline function (the complete
+#   list of functions can be printed with the command 'bind -l'), or build the
+#   proper string;
+#   for a command like 'pwd -P', the string can be:
+#   "pwd -P\n" (the command followed by newline into double quotes)
+#   or:
+#   "pwd -P\C-M" (the command followed by Ctrl-M into double quotes)
+# - Be sure the combination of keys is not already used: test it in different
+#   situations (virtual console or graphical terminal, screen, etc).
+# - How to easily know the proper string to write for a combination of keys?
+#   Run the 'cat' command and type your combination; for example, for the
+#   keys <Shift-Tab>, it prints [Z into xterm and only a tab in linux
+#   console. So, translate  into \e (for Escape).
+# - Finally, our example is:
+#   $if term=xterm
+#     "\e[Z": "pwd -P\n"
+#   $endif
+# }}}
+#
+$if Bash
+# This is a very useful tip to automatically bind the <Shift-Tab> sequence to
+# 'menu-complete-backward' when the <Tab> key is bound to 'menu-complete'.
+"\e[Z": "\e-1\C-i"
+#
+# insert double quotes & set cursor between them with <Ctrl-X><">
+#"\C-x\"": "\"\"\C-b"
+#
+# insert single quotes & set cursor between them with <Ctrl-X><'>
+#"\C-x'": "''\C-b"
+#
+#"\e\"": "\eb\"\ef\""
+#"\e'": "\eb'\ef'"
+#
+# F10 toggles mc on and off. Note Ctrl-O toggles panes on and off in mc (switch
+# between mc and shell within a mc process).
+"\e[21~": "mc\n"
+#
+# F12 opens a screen or a tmux session
+#"\e[24~": "screen\n"
+#"\e[24~": "tmux\n"
+#
+# Alt in combination with "up" and "left" arrow keys to change directory:
+#"\e[1;3A": "cd ..\n"
+#"\e[1;3D": "cd -\n"
+#
+# The same with Ctrl:
+#"\e[1;5A": "cd ..\n"
+#"\e[1;5B": "cd\n"
+#
+# Ctrl with "right" arrow key do the same as Tab:
+#"\e[1;5C": "\t"
+#
+# Insert a real Tab space and a real new line:
+"\e[1;3C": "\C-v\C-i"
+"\e[1;3B": "\C-v\C-j"
+$endif
+## ==========================================================================}}}
+
+# vim: et ts=2 sts=2 sw=2 tw=80 fo=roc fdm=marker ft=readline
