@@ -16,7 +16,7 @@ The purpose is to provide colorschemes and statuslines that make console tools
 working fine together. For examples:
 
 - MC's filehighlight.ini and its cyanellow skins make that directory contents
-  are displayed with the same colors than the output of 'ls --color', and the
+  are displayed with the same colors than the output of `ls --color`, and the
   frames and regular files don't share the same color.
 
 - Vim's netrw directory contents become closer to ls output (directories in
