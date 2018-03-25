@@ -54,35 +54,7 @@ else
 fi
 
 
-# If this is an xterm set the title to user@host:dir; if this is a screen (or
-# tmux), then do more complicated stuff...
-case "$TERM" in
-    xterm*|rxvt*)
-        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-        ;;
-    screen*)
-        # Do not change the window title:
-        #PROMPT_COMMAND='printf "\033k\033\\"'
-        # Or set it dynmically:
-        #PROMPT_COMMAND='printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
-
-        # The first one is to change the window title right BEFORE a command is
-        # executed, although the second one is to change the window title AFTER
-        # a command has been executed.
-        trap 'printf "\033k%s\033\\" "${BASH_COMMAND/ *}"' DEBUG
-        PROMPT_COMMAND='printf "\033k%s\033\\" "bash"'
-        ;;
-    tmux*)
-        # Just put this in your tmux.conf to ensure the same behaviour than
-        # above with screen:
-        # set -g default-terminal tmux
-        # setw -g automatic-rename on
-        ;;
-    *)
-        ;;
-esac
-
-# enable color support of ls and grep 
+# enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
     if [ -r ~/.dircolors ]; then
         eval "$(dircolors -b ~/.dircolors)"
@@ -113,5 +85,33 @@ if ! shopt -oq posix; then
         . /etc/bash_completion
     fi
 fi
+
+# If this is an xterm set the title to user@host:dir; if this is a screen (or
+# tmux), then do more complicated stuff...
+case "$TERM" in
+    xterm*|rxvt*)
+        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+        ;;
+    screen*)
+        # Do not change the window title:
+        #PROMPT_COMMAND='printf "\033k\033\\"'
+        # Or set it dynmically:
+        #PROMPT_COMMAND='printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+
+        # The first one is to change the window title right BEFORE a command is
+        # executed, although the second one is to change the window title AFTER
+        # a command has been executed.
+        trap 'printf "\033k%s\033\\" "${BASH_COMMAND/ *}"' DEBUG
+        PROMPT_COMMAND='printf "\033k%s\033\\" "bash"'
+        ;;
+    tmux*)
+        # Just put this in your tmux.conf to ensure the same behaviour than
+        # above with screen:
+        # set -g default-terminal tmux
+        # setw -g automatic-rename on
+        ;;
+    *)
+        ;;
+esac
 
 # vim: et sts=4 sw=4 ts=4 ft=sh
