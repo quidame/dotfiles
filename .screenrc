@@ -1,0 +1,690 @@
+################################################################################
+#                               SCREEN  SETTINGS                               #
+################################################################################
+
+# COPYRIGHT ================================================================={{{
+#                                                                              #
+# © Copyright 2011-2018, quidame <quidame@poivron.org>                         #
+# This file can be copied, modified and/or distributed under the terms of the  #
+# GNU General Public Licence, version 3.                                       #
+#                                                                              #
+# Last Update: 2018-03-23                                                      #
+#                                                                              #
+# ===========================================================================}}}
+# IMPORTANT ================================================================={{{
+#                                                                              #
+# All of these settings can be used in one or several configuration files.     #
+#                                                                              #
+# For Debian:                                                                  #
+# - /etc/screenrc or $SYSSCREENRC       (system settings)                      #
+# - ~/.screenrc or $SCREENRC            (user settings)                        #
+#                                                                              #
+# or on the fly, i.e during a screen session itself. Type 'Ctrl-A ?' to access #
+# internal help.                                                               #
+#                                                                              #
+# Commands in this file are used to set options, bind screen functions to      #
+# keys, redefine terminal capabilities, and to automatically establish one     #
+# or more windows at the beginning of your screen session.                     #
+#                                                                              #
+# This is not a comprehensive list of options, look at the screen manual       #
+# for details on everything that you can put in this file.                     #
+#                                                                              #
+# ===========================================================================}}}
+
+# SCREEN SESSIONS ==========================================================={{{
+#
+# autodetach on|off
+# Sets whether Screen will automatically detach upon hangup, which saves all
+# your running programs until they are resumed with a 'screen -r' command.
+# When turned off, a hangup signal will terminate Screen and all the processes
+# it contains.
+# Default is 'on'.
+autodetach on
+#
+# chdir [directory]
+# Change the current directory of Screen to the specified directory or, if
+# called without an argument, to your $HOME directory. All windows that are
+# created by means of the "screen" command from within .screenrc or by means
+# of "C-a :screen …" or "C-a c" use this as their default directory.
+# Without a 'chdir' command, this would be the directory from which Screen
+# was invoked. Hardcopy and log files are always written to the window's
+# default directory, not the current directory of the process running in the
+# window.
+chdir
+#
+# multiuser on|off
+# Switch between singleuser and multiuser mode. Standard Screen operation is
+# singleuser. In multiuser mode the commands 'acladd', 'aclchg', 'aclgrp', and
+# 'acldel' can be used to enable (or disable) other users accessing this Screen
+# session.
+# You may have to tweak your system to make it working. The current settings to
+# share a screen session on Debian is the following:
+# 1. Change permissions of the executable in a maner that dpkg is aware of that
+#    and will preserve it across updates. It must be SUID root and with full
+#    rights for utmp group:
+#    # dpkg-statoverride --update --add root utmp 4775 /usr/bin/screen
+# 2. Change permissions of a temporary directory in a maner that it will not
+#    be lost across reboots.
+#    # echo 'd /run/screen 0755 root utmp' >/etc/tmpfiles.d/screen-cleanup.conf
+# 3. Also change it on the fly:
+#    # chmod 0755 /run/screen
+# Default is 'off'.
+multiuser off
+#
+# password [crypted_pw]
+# Present a crypted password in your .screenrc file and Screen will ask for it,
+# whenever someone attempts to resume a detached. This is useful if you have
+# privileged programs running under Screen and you want to protect your session
+# from reattach attempts by another user masquerading as your uid (i.e. any
+# superuser). If no crypted password is specified, screen prompts twice for
+# typing a password and places its encryption in the paste buffer.
+# Default is 'none', this disables password checking.
+password IRaaeCR0pXngo
+#
+# nonblock [on|off|numsecs]
+# defnonblock on|off|numsecs
+# Tell screen how to deal with user interfaces (displays) that cease to
+# accept output. This can happen if a user presses ^S or a TCP/modem
+# connection gets cut but no hangup is received. If nonblock is off
+# (this is the default) screen waits until the display restarts to accept
+# the output. If nonblock is on, screen waits until the timeout is reached
+# (on is treated as 1s). If the display still doesn't receive characters,
+# screen will consider it "blocked" and stop sending characters to it.
+# If at some time it restarts to accept characters, screen will unblock
+# the display and redisplay the updated window contents.
+# Default is 'off'.
+# Enable non-blocking mode to better cope with flaky ssh connections.
+defnonblock 5
+#
+# ===========================================================================}}}
+# BELLS AND MESSAGES ========================================================{{{
+#
+# startup_message
+# Select whether you want to see the copyright notice during startup.
+# Default is 'on'.
+startup_message off
+#
+# nethack on|off
+# Changes the kind of error messages used by Screen. When you are familiar with
+# the game "nethack", you may enjoy the nethack-style messages which will often
+# blur the facts a little, but are much funnier to read.
+# Default is 'on' if $NETHACKOPTIONS is defined or ~/.nethackrc exists.
+nethack off
+#
+# sorendition [attr [color]]
+# Change the way Screen does highlighting for text marking and printing
+# messages.
+# Default is '=s dd' (standout, default colors).
+sorendition '=bu dR'
+#
+# activity message
+# When any activity occurs in a background window that is being monitored,
+# Screen displays a notification in the message line. The notification message
+# can be re-defined here. Note that monitoring is off for all windows by
+# default, but can be altered by use of the 'monitor' command (C-a M).
+# Default is 'Activity in window %n'.
+activity '%{=}%{+r dR}%n (%t) is active !'
+#
+# monitor [on|off]
+# defmonitor [on|off]
+# Toggles activity monitoring of windows. When monitoring is turned on and
+# an affected window is switched into the background, you will receive a
+# notification message in the status line at the first sign of output, and
+# the window will also be marked with a '@' in the window-status display.
+# Default is 'off'.
+monitor on
+defmonitor on
+#
+# bell_msg [message]
+# When a bell character is sent to a background window, Screen displays a
+# notification in the message line. The notification message can be re-defined
+# here.
+# Default is 'Bell in window %n'.
+bell_msg ''
+#
+# vbell [on|off]
+# Sets the visual bell setting for this window. Omitting the parameter toggles
+# the setting. If 'vbell' is switched on, but your terminal does not support a
+# visual bell, a 'vbell-message' is displayed in the status line instead. If
+# 'vbell' is switched off, the audible bell is used.
+# Default is 'off'.
+vbell on
+#
+# vbell_msg [message]
+# Sets the visual bell message. This message is printed to the status line if
+# the window receives a bell character (^G), vbell is set to 'on', but the
+# terminal does not support a visual bell.
+# Default is '   Wuff  ---  Wuff!!  '.
+vbell_msg ''
+#
+# msgminwait integer
+# Defines the time screen delays a new message when one message is currently
+# displayed.
+# Default is '1' (second).
+msgminwait 0
+#
+# msgwait sec
+# Defines the time a message is displayed if Screen is not disturbed by other
+# activity.
+# Default is '5' (seconds).
+msgwait 2
+#
+# pow_detach_msg [message]
+# The message specified here is output whenever a 'Power detach' was performed.
+pow_detach_msg "Screen session of $USER is detached ('screen -R' to reattach)."
+# ===========================================================================}}}
+# KEYBINDINGS ==============================================================={{{
+#
+# The "bind" command assigns keys to internal commands. SCREEN checks all the
+# keys you type; you type the key which is known as the "command character"
+# then SCREEN eats this key, too, and checks whether this key is "bound" to a
+# command. If so then SCREEN will execute it.
+#
+# The command "bind" allows you to choose which keys will be assigned to the
+# commands.
+#
+# Some commands are bound to several keys - usually to both some letter and its
+# corresponding control key combination, eg the command "(create) screen" is
+# bound to both 'c' and '^C'.
+#
+# The following list shows the default bindings:
+#{{{
+# break       ^B b
+# clear       C
+# colon       :
+# copy        ^[ [
+# detach      ^D d
+# digraph     ^V
+# displays    *
+# dumptermcap .
+# fit         F
+# flow        ^F f
+# focus       ^I
+# hardcopy    h
+# help        ?
+# history     { }
+# info        i
+# kill        K k
+# lastmsg     ^M m
+# license     ,
+# log         H
+# login       L
+# meta        x
+# monitor     M
+# next        ^@ ^N sp n
+# number      N
+# only        Q
+# other       ^X
+# pow_break   B
+# pow_detach  D
+# prev        ^H ^P p ^?
+# quit        \
+# readbuf     <
+# redisplay   ^L l
+# remove      X
+# removebuf   =
+# reset       Z
+# screen      ^C c
+# select      " '
+# silence     _
+# split       S
+# suspend     ^Z z
+# time        ^T t
+# title       A
+# vbell       ^G
+# version     v
+# width       W
+# windows     ^W w
+# wrap        ^R r
+# writebuf    >
+# xoff        ^S s
+# xon         ^Q q
+# ^]  paste .
+# -   select -
+# 0   select 0
+# 1   select 1
+# 2   select 2
+# 3   select 3
+# 4   select 4
+# 5   select 5
+# 6   select 6
+# 7   select 7
+# 8   select 8
+# 9   select 9
+# I   login on
+# O   login off
+# ]   paste .
+#}}}
+#
+# And here are the default bind commands if you need them:
+#{{{
+# bind A title
+# bind C clear
+# bind D pow_detach
+# bind F fit
+# bind H log
+# bind I login on
+# bind K kill
+# bind L login
+# bind M monitor
+# bind N number
+# bind O login off
+# bind Q only
+# bind S split
+# bind W width
+# bind X remove
+# bind Z reset
+#}}}
+#
+# Let's remove some dangerous key bindings ...
+bind	k
+bind	^k
+# bind	.  dumptermcap # default
+bind	.
+# bind	^\ quit        # default
+#bind	^\
+# bind	\\ quit        # default
+bind	\\
+# bind	^h ???         # default
+bind	^h
+# bind	h  hardcopy    # default
+bind	h
+# bind W   width       # default
+bind  W
+#
+# ... and make them better.
+bind	'K' kill
+bind	'I' login on
+bind	'O' login off
+bind	'}' history
+#
+# For good <backspace> behaviour in some terminals and especially in poor
+# prompt implementations such as 'mail', 'telnet', 'wall', 'nslookup' and
+# the like:
+bindkey	-d -k kb stuff "\177"
+#
+# Yet another hack:
+# Prepend/append register [/] to the paste if ^a^] is pressed.
+# This lets me have autoindent mode in vi.
+register	[ "\033:se noai\015a"
+register	] "\033:se ai\015a"
+bind		^] paste [.]
+#
+# Resize the current region. The space will be removed from or added to
+# the region below or if there's not enough space from the region above.
+bind	= resize =
+bind	+ resize +3
+bind	- resize -3
+# bind	_ resize max
+#
+# Switcth between windows by hitting function keys (F5, F6 & F7).
+# NOTE: this doesn't work with F1 to F4
+# XXX: don't use function keys that can be caught by an underlying
+# application (the terminal emulator, the desktop environment) or that can
+# catch keystrokes you want/need to use in a child application (mc, vim,
+# aptitude…):
+#bindkey -k k5 other
+#bindkey -k k6 prev
+#bindkey -k k7 next
+#
+# ===========================================================================}}}
+# TERMINAL CAPABILITIES ====================================================={{{
+#
+# 1. More or less generic
+# -----------------------
+#
+# advertise hardstatus support to $TERMCAP
+#termcapinfo	* 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
+#termcapinfo	* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
+#
+# set these terminals up to be 'optimal' instead of vt100
+termcapinfo xterm*|linux*|rxvt*|Eterm* 'OP'
+#
+# Set the hardstatus prop on gui terms to set the titlebar/icon title
+termcapinfo xterm*|rxvt*|kterm*|Eterm* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
+#
+# Try to restore the initial state of the screen after Screen has exited
+termcapinfo * 'te=\E[2J\E[?47l\E8:ti=\E7\E[?47h'
+#
+# Try to enable mouse support in all consoles/terminals (to use with mc, vim,
+# nano or aptitude, for example); for the moment, this doesn't work in all
+# cases (linux console):
+termcapinfo	* 'ti@:te@:XT'
+#
+# 2. VT100 specific
+# -----------------
+#
+# Extend the vt100 description by some sequences.
+termcapinfo	vt100   'dl=5\E[M'
+termcap     vt100*  'ms:AL=\E[%dL:DL=\E[%dM:UP=\E[%dA:DO=\E[%dB:LE=\E[%dD:RI=\E[%dC'
+terminfo    vt100*  'ms:AL=\E[%p1%dL:DL=\E[%p1%dM:UP=\E[%p1%dA:DO=\E[%p1%dB:LE=\E[%p1%dD:RI=\E[%p1%dC'
+#
+# 3. Linux console
+# ----------------
+#
+# Enable 8-colors in linux console:
+#termcapinfo	linux 'C8'
+#
+# Enable 16-colors in linux console (see Vim, :help xterm-color)
+#termcapinfo linux 'Co#16:AB=\E[%?%p1%{8}%<%t%p1%{40}%+%e%p1%{32}%+5;%;%dm:AF=\E[%?%p1%{8}%<%t%p1%{30}%+%e%p1%{22}%+1;%;%dm'
+#
+# 4. Xterm specific
+# -----------------
+#
+# Special xterm hardstatus: use the window title.
+#termcapinfo	xterm 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+#
+# Xterm understands both im/ic and doesn't have a status line.
+# Note: Do not specify im and ic in the real termcap/info file as some programs
+# (e.g. vi) will not work anymore.
+termcap		xterm* 'hs@:cs=\E[%i%d;%dr:im=\E[4h:ei=\E[4l'
+terminfo	xterm* 'hs@:cs=\E[%i%p1%d;%p2%dr:im=\E[4h:ei=\E[4l'
+#
+# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E>
+# (This fixes the "Aborted because of window size change" konsole symptoms found
+# in bug #134198)
+termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+#
+# 80/132 column switching must be enabled for ^AW to work change init sequence
+# to not switch width.
+termcapinfo	xterm* 'Z0=\E[?3h:Z1=\E[?3l:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+#
+# Make the output buffer large for (fast) xterms.
+# termcapinfo	xterm* OL=10000
+termcapinfo	xterm* 'OL=1000'
+#
+# Tell screen that xterm can switch to dark background and has function keys.
+termcapinfo	xterm* 'VR=\E[?5h:VN=\E[?5l'
+termcapinfo	xterm* 'k1=\E[11~:k2=\E[12~:k3=\E[13~:k4=\E[14~'
+termcapinfo	xterm* 'kh=\EOH:kI=\E[2~:kD=\E[3~:kH=\EOF:kP=\E[5~:kN=\E[6~'
+#
+# Set the visual bell.
+#terminfo	xterm 'vb=\E[?5h$<200/>\E[?5l'
+termcapinfo	xterm* 'vi=\E[?25l:ve=\E[34h\E[?25h:vs=\E[34l'
+#
+# Use 256-colors set
+#termcapinfo xterm* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#
+# Emulate part of the 'K' charset
+termcapinfo	xterm* 'XC=K%,%\E(B,[\304,\\\\\326,]\334,{\344,|\366,}\374,~\337'
+#
+# Xterm-52 tweaks: uses background color for delete operations
+termcapinfo	xterm* 'be'
+#
+# The <backspace> key doesn't work on some X terminals (especially the one I
+# use, xfce4-terminal). Try with this… or still use ^H:
+termcapinfo	xterm* 'bc@:bs@'
+#
+# ===========================================================================}}}
+# STATUSLINES SETTINGS ======================================================{{{
+#
+# Hardstatus and Caption strings:
+# Syntax {{{
+# Screen provides an escape mechanism to insert information like the current
+# time into messages, file names, status line, etc. The escape character is
+# '%'.
+#
+# 1. Predefined strings (including the escape character):
+# -------------------------------------------------------
+# %%	the '%' character itself
+# %a	am/pm flag
+# %A	AM/PM flag
+# %c	current time HH:MM in 24h format
+# %C	current time HH:MM in 12h format
+# %d	month's day number
+# %D	week's day name
+# %f	flags of the window (currently '$', '-$' or '@$')
+# %F	sets '%?' to true if the window has the focus
+# %h	hardstatus of the window
+# %H	hostname of the system
+# %l	current load average
+# %m	month number
+# %M	month name
+# %n	window number
+# %s	seconds (don't use it if you want to scroll)
+# %t	window title
+# %u	all other users on this window
+# %w	all windows with current marked
+# %W	all windows excepted the current one
+# %y	last two digits of the year number
+# %Y	full year number
+#
+# 2. Conditionals:
+# ----------------
+# %?	the part to the next '%?' is displayed only if an escape sequence inside
+#	    the part expands to a non-empty string.
+# %:	the 'else' part of '%?'
+#
+# 3. Positions:
+# -------------
+# %=	pad the string to the display's width. If a number is specified, pad to
+#     the percentage of the window's width.
+# %<	same as '%=' but just do truncation, do not fill with spaces.
+# %>	mark the current text position for the next truncation.
+#
+# 4. Qualifiers:
+# --------------
+# 0	- the 'c' and 'C' escapes may be qualified with a '0' (as '%0c') to
+# 	  make screen use zero instead of space as fill character.
+# 	- The '0' qualifier also makes the '=' escape use absolute positions.
+# +	- you can specify to pad relative to the last absolute pad position by
+# 	  adding a '+' qualifier to the '=' escape (as '%+=').
+# -	- you can specify to pad relative to the right margin by adding a '-'
+# 	  to the '=' escape (as '%-=').
+# L	- the 'w' and 'W' escapes show the window flags if 'L' is given (as in
+# 	  '%Lw').
+# 	- the 'D' and 'M' escapes can be prefixed with 'L' to generate long
+# 	  names.
+# Also 'n' and '=' escapes understand a length qualifier (e.g. '%3n').
+#
+# 5. Attributes and Colors:
+# -------------------------
+# An attribute/color modifier is used to change the attributes or the color
+# settings. The attribute modifier must be prefixed by a change type if it can
+# be confused with a color description. Attribute and color modifiers must be
+# enclosed between '%{' and '}'.
+# The following change types are known:
+# +	add the specified set to the current attributes
+# -	remove the specified set from the current attributes
+# !	invert the set of the current attributes
+# =	change the current attributes to the specified set
+# The attribute set can be specified by a combination of the following letters:
+# b	bold
+# B	blinking
+# d	dim
+# r	reverse
+# s	standout
+# u	underline
+# Colors are coded as two letters specifying the background and foreground (in
+# that order). The following colors are known:
+# b	blue
+# c	cyan
+# d	default color
+# g	green
+# k	black
+# m	magenta
+# r	red
+# w	white
+# y	yellow
+# .	leave color unchanged
+# i	set brightness without change the current color
+# The capitalized versions of the letters specify bright colors.
+# As a special case '%{-}' restores the attributes and colors that were set
+# before the last change was made.
+#}}}
+#
+# caption always|splitonly [string]
+# caption string [string]
+# This command controls the display of the window captions. Normally a caption
+# is only used if more than one window is shown on the display (split screen
+# mode). But if the type is set to always, Screen shows a caption even if only
+# one window is displayed.
+# Default is 'splitonly'.
+caption splitonly
+# The second form changes the text used for the caption (see the Syntax section
+# above).
+# Default is '%3n %t' (means 'window number padded on 3 characters, space, and
+# window title).
+caption string "%{=u}%?%F%{.Y}%:%{.c}%?%n %t"
+#
+# defhstatus [status]
+# The hardstatus line that all new windows will get is set to status. This
+# command is useful to make the hardstatus of every window display the window
+# number or title or the like. If the parameter 'status' is omitted, the
+# current default string is displayed.
+# Default is ''.
+#defhstatus ''
+#
+# hardstatus [on|off]
+# hardstatus [always]lastline|message|ignore [string]
+# hardstatus string [string]
+# This command configures the use and emulation of the terminal's hardstatus
+# line. The first form toggles whether Screen will use the hardware status
+# line to display messages. If the flag is set to 'off', these messages are
+# overlaid in reverse video mode at the display line.
+# Default is 'on'.
+hardstatus on
+# The second form tells Screen what to do if the terminal does'nt have a
+# hardstatus line. If the type "lastline" is used, Screen will reserve the
+# last line of the display for the hardstatus. "message" uses Screen's message
+# mechanism and "ignore" tells Screen never to display the hardstatus. If you
+# prepend the word "always" to the type (e.g. "alwayslastline"), Screen will
+# use the type even if the terminal supports a hardstatus.
+hardstatus alwayslastline
+# The third form specifies the contents of the hardstatus line. '%h' is used
+# as default, i.e. the stored hardstatus of the current window is displayed.
+hardstatus string "%{=u .c}%-Lw%{= .Y}%50>[%n %t]%{-}%+Lw%<%=%{= .m} [$USER@%H] %{.g}[%D %Y/%m/%d %0c]"
+## ==========================================================================}}}
+# OTHER OPTIONS ============================================================={{{
+#
+# altscreen on|off
+# If set to on, "alternate screen" support is enabled in virtual terminals,
+# just like in xterm. Initial setting is `off'.
+altscreen on
+#
+# compacthist [on|off]
+# This tells Screen whether to suppress trailing blank lines when scrolling up
+# text into the history buffer.
+compacthist on
+#
+# crlf [on|off]
+# This affects the copying of text regions with the 'C-a [' command. If it is
+# set to 'on', lines will be separated by the two character sequences 'CR' and
+# 'LF' (as on MS-DOS/Windows systems). Otherwise only 'LF' is used (as on UNIX
+# and GNU/Linux systems). When no parameter is given, the state is toggled.
+# Default is 'off'.
+crlf off
+#
+# utf8 [on|off [on|off]]
+# defutf8 on|off
+# Change the encoding used in the current window. If 'utf8' is enabled, the
+# strings sent to the window will be UTF-8 encoded and vice versa. Omitting
+# the parameter toggles the setting. If a second parameter is given, the
+# display's encoding is also changed. "defutf8" changes the setting for a new
+# window.
+utf8 on on
+defutf8 on
+#
+# enconding enc [enc]
+# defencoding enc
+# Tell Screen how to interpret the input/output. The first argument sets the
+# encoding of the current window. Each window can emulate a different encoding.
+# The optional second parameter overwrites the encoding of the connected
+# terminal. It should never be needed as Screen uses the locale setting to
+# detect the encoding. "defencoding" changes the default setting for a new
+# window.
+encoding UTF-8
+defencoding UTF-8
+#
+# Change default scrollback value:
+defscrollback 1000
+#
+# Update or do not update utmp file
+deflogin off
+#
+# Enable partial mouse support (click on window to make it the active one),
+# but this can disable text selection with mouse in the shell. This doesn't
+# seem to affect other applications with mouse support (mc, vim, aptitude…)
+#mousetrack on
+#defmousetrack on
+#
+# Define the time that all windows monitored for silence should
+# wait before displaying a message. Default 30 seconds.
+#silencewait 0			# default: 30
+#
+# bufferfile:   The file to use for commands
+#               "readbuf" ('<') and  "writebuf" ('>'):
+#bufferfile	~/.screen/exchange
+#
+# hardcopydir:  The directory which contains all hardcopies.
+# hardcopydir           ~/.hardcopy
+#hardcopydir	~/.screen
+#
+# shell:  Default process started in screen's windows.
+# Makes it possible to use a different shell inside screen than the one set
+# as the default login shell in /etc/passwd.
+# If begins with a '-' character, the shell will be started as a login shell.
+# shell                 zsh
+# shell                 bash
+# shell                 ksh
+#
+# shellaka '> |tcsh'
+# shelltitle '$ |bash'
+#
+# set every new windows hardstatus line to something descriptive
+# defhstatus "screen: ^En (^Et)"
+#
+# don't kill window after the process died
+# zombie "^["
+#
+# Don't you want to start programs which need a DISPLAY ?
+# setenv DISPLAY ''
+# ===========================================================================}}}
+# ESCAPE - the COMMAND CHARACTER ============================================{{{
+#
+# escape ^aa  # default
+# escape ^pp  # suggested binding for emacs users
+# ===========================================================================}}}
+# STARTUP SCREENS ==========================================================={{{
+#
+# Uncomment one/some following lines to automatically let
+# SCREEN start some programs in the given window numbers:
+# screen -t MAIL        0 mutt
+# screen -t EDIT        1 vim
+# screen -t GOOGLE      2 links http://www.google.com
+# screen -t NEWS        3 slrn
+# screen 5
+# screen 6
+
+# Here is a more complex example on how to open a screen window with several
+# regions of different sizes:
+# {{{
+# 1. Vertical split of the window:
+#    split -v
+# 2. Run 'top' on the left region:
+#    screen 0 top
+# 3. Run bash on the right:
+#    focus down
+#    screen 1 bash
+# 4. Give it more space:
+#    resize +20
+# 5. Horizontal split of the right region:
+#    split
+# 6. Give more space to the bottom:
+#    resize -10
+# 7. Run mc at the bottom right region:
+#    focus down
+#    screen -t MC 2 mc -x ~ /
+# 8. Focus on bash (right top)
+#    focus up
+# }}}
+#
+# Set the environment variable var to value string. If only var is specified,
+# you'll be prompted to enter a value. If no parameters are specified,
+# you'll be prompted for both variable and value. The environment is
+# inherited by all subsequently forked shells.
+#setenv PROMPT_COMMAND 'printf "\033k\033\\"'
+#setenv PROMPT_COMMAND 'printf "\033k%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+# ===========================================================================}}}
+
+# vim: set ft=screen et ts=2 sts=2 sw=2 tw=80 fo=roc fdm=marker:
