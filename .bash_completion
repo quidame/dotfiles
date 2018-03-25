@@ -10,4 +10,4 @@ if [[ -d ~/.bash_completion.d ]]; then
     unset i
 fi
 
-# ex: ts=4 sw=4 et filetype=sh
+# vim: et sts=4 sw=4 ts=4 ft=sh
