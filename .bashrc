@@ -114,4 +114,8 @@ case "$TERM" in
         ;;
 esac
 
+# Export LC_* variables. This may be required on some distributions to avoid
+# tmux setting them all to "POSIX".
+eval export $(locale)
+
 # vim: et sts=4 sw=4 ts=4 ft=sh
