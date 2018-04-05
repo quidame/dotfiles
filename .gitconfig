@@ -1,0 +1,44 @@
+[user]
+	name = quidame
+	email = quidame@poivron.org
+	signingkey = 3AA2078F924898F6
+
+[core]
+	editor = vim
+	pager = less
+
+[push]
+	default = simple
+
+[alias]
+	co = checkout
+	ls = ls-files
+	ec = config --global --edit
+	mh = diff master HEAD
+	#undo = reset HEAD --soft
+	#undo = reset HEAD~1 --mixed
+	hist = log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
+
+[color]
+	ui = true
+[color "diff"]
+	# this gives something very close to what vim looks like with my
+	# favirite colorscheme ('git diff' and 'git diff | view -' should
+	# look similar).
+	plain      = white
+	commit     = bold yellow
+	new        = bold cyan
+	old        = bold red
+	meta       = bold green
+	frag       = bold yellow
+	func       = bold blue
+	whitespace = bold reverse red
+[color "status"]
+	header     = cyan
+	added      = bold yellow
+	changed    = bold red
+	untracked  = cyan dim
+[color "branch"]
+	current    = bold yellow
+	local      = cyan
+
