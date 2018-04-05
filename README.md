@@ -11,17 +11,18 @@ This skeleton embeds consistent themes and intercompatible settings for:
 * vim
 * screen
 * tmux
+* aptitude
+* git
 
 The purpose is to provide colorschemes and statuslines that make console tools
 working fine together. For examples:
 
-- **MC**'s `filehighlight.ini` and its *cyanellow* skins make that directory
+- **MC**'s `filehighlight.ini` and its `cyanellow` skins make that directory
   contents are displayed with the same colors than the output of `ls --color`,
   and the frames and regular files don't share the same color.
 
 - **Vim**'s `netrw` directory contents become closer to `ls --color` output
-  too, even if not so fine-grained (directories in blue, symlinks in bright
-  cyan, executables in bright green, other files as regular files).
+  too, even if not so fine-grained.
 
 - **GNU Screen** and **Tmux** statuslines look very close, except for the
   brightness, that is intentional (adding a *dim* attribute to *tmux* colors
