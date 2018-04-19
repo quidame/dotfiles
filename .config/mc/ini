@@ -5,7 +5,7 @@ confirm_exit=0
 confirm_execute=1
 safe_delete=1
 drop_menus=1
-skin=dircolors0
+skin=cyanellow0
 
 [Layout]
 command_prompt=0
