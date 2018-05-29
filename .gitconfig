@@ -17,7 +17,7 @@
 	mh = diff master HEAD
 	#undo = reset HEAD --soft
 	#undo = reset HEAD~1 --mixed
-	hist = log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 
 [color]
 	ui = true
