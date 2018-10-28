@@ -23,7 +23,7 @@
 	ui = true
 [color "diff"]
 	# this gives something very close to what vim looks like with my
-	# favirite colorscheme ('git diff' and 'git diff | view -' should
+	# favorite colorscheme ('git diff' and 'git diff | view -' should
 	# look similar).
 	plain      = white
 	commit     = bold yellow
