@@ -625,7 +625,7 @@ deflogin off
 # as the default login shell in /etc/passwd.
 # If begins with a '-' character, the shell will be started as a login shell.
 # shell                 zsh
-# shell                 bash
+shell                 bash
 # shell                 ksh
 #
 # shellaka '> |tcsh'
