@@ -7,7 +7,7 @@ if [ "$SHLVL" = 1 ]; then
 
     if [ "$(users | grep -ow "${USER}" | wc -w)" = 1 ]; then
         # when leaving all consoles and terminals, remove temporary files
-        rm -rf ${HOME}/.tmp/* ${HOME}/.tmp/.??*
+        rm -rf ${HOME}/tmp ${HOME}/.tmp
 
         # and drop credentials
         sudo -k
