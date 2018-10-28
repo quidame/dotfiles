@@ -27,12 +27,18 @@ $endif
 # }}}
 #set byte-oriented off
 #
+# colored-completion-prefix ================================================={{{
+# If set to 'on', readline displays possible completions by coloring their
+# common prefix.
+# Default is 'off'. }}}
+set colored-completion-prefix on
+#
 # colored-stats ============================================================={{{
 # If set to 'on', readline displays possible completions using different colors
 # to indicate their filetype. The color definitions are taken from the value of
 # the LS_COLORS environment variable.
 # Default is 'off'. }}}
-#set colored-stats off
+set colored-stats on
 #
 # completion-ignore-case {{{
 # If set to 'on', readline performs filename matching and completion in a
@@ -303,8 +309,8 @@ set bell-style none
 "\e[B": history-search-forward
 #
 # <Alt> with right or left arrows:
-#"\e[1;3D": menu-complete-backward
-#"\e[1;3C": menu-complete
+"\e[1;3C": menu-complete
+"\e[1;3D": menu-complete-backward
 ## ==========================================================================}}}
 
 ## DEFINE READLINE MACROS ==================================================={{{
@@ -348,24 +354,6 @@ $if Bash
 # between mc and shell within a mc process).
 "\e[21~": "mc\n"
 #
-# F12 opens a screen or a tmux session
-#"\e[24~": "screen\n"
-#"\e[24~": "tmux\n"
-#
-# Alt in combination with "up" and "left" arrow keys to change directory:
-#"\e[1;3A": "cd ..\n"
-#"\e[1;3D": "cd -\n"
-#
-# The same with Ctrl:
-#"\e[1;5A": "cd ..\n"
-#"\e[1;5B": "cd\n"
-#
-# Ctrl with "right" arrow key do the same as Tab:
-#"\e[1;5C": "\t"
-#
-# Insert a real Tab space and a real new line:
-"\e[1;3C": "\C-v\C-i"
-"\e[1;3B": "\C-v\C-j"
 $endif
 ## ==========================================================================}}}
 
