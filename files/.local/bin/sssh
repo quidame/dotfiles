@@ -1,0 +1,54 @@
+#!/bin/sh
+set -eu
+
+# SSSH (Synchronized SSH) over tmux panes
+#
+# This script allows one to open several ssh sessions, each in its own pane
+# within a TMUX window. Inputs of the remote shells are synchronized using the
+# 'synchronize-panes' tmux feature. It is of better experience, when using this
+# script, to tweak your tmux.conf file and keep a keystroke to toggle the sync.
+# In my case, <C-b><C-b> is the switch:
+#
+#bind-key C-b set-window-option synchronize-panes
+#
+# This gives ability to send keys to either all panes or only the focused one.
+# OK, this is not as convenient as mssh (Multi SSH), that is a good tool, but
+# is not fully console oriented (you open terminals into a gtk interface, not
+# into a terminal).
+#
+# My usecase is the following:
+# 1. I open tmux into a terminal
+# 2. I open screen in the first tmux window for all local jobs
+# 3. I open tmux windows and panes for remote jobs
+# 4. So I can open and use screen out of the box on remote hosts within a same
+#    terminal tab or linux console.
+
+until [ $# -gt 1 ]; do
+    echo -n "Please provide a space-separated list of hosts to connect to (or ^C to abort) : "
+    read REMOTES
+    eval set -- "${REMOTES}"
+done
+
+tmux_stuff() {
+    tmux new-window "ssh $1"
+    shift
+
+    for h in $*; do
+        # split window horizontally, that means "create a new pane beside (on
+        # the right of) the current one". It's fair with modern screens.
+        tmux split-window -h "ssh $h"
+    done
+
+    # If we open only two panes, let them as is (beside each other); otherwise
+    # tell tmux to reorder them smartly:
+    [ $# -gt 1 ] && tmux select-layout tiled > /dev/null
+
+    # Enable sychronization, i.e. duplicate keyboard inputs into all panes in
+    # this window, then give the focus (and the cursor) to the first pane (0):
+    tmux set-window-option synchronize-panes on > /dev/null
+    tmux select-pane -t 0
+}
+
+tmux_stuff $*
+
+# vim: et sts=4 sw=4 ts=4
