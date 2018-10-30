@@ -33,6 +33,12 @@ alias mc='mc -x'
 alias mcedit='mcedit -x'
 alias mcview='mcview -x'
 
+# Make that sudo is aware of user's HOME directory (this makes sense only when
+# getting an interactive shell or application - vim, mc), even when:
+# - HOME is not in the 'env_keep' list, in sudoers
+# - use of '-E' option is forbidden in sudoers too
+alias sudo='sudo HOME="${HOME}" SSH_CONNECTION="${SSH_CONNECTION}"'
+
 # Alias some useful commands if they're out of the user's PATH
 for x in \
     blkid \
