@@ -112,9 +112,9 @@ TITLE_PREFIX="${SUDO_USER:+${USER%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.
 
 # ... and is overridden with some unconditionals
 case "${BASH_CURRENT_PARENT_PROCESS}" in
-    login|screen)
+    login)
         TITLE_PREFIX= ;;
-    su|sudo)
+    su)
         TITLE_PREFIX="${USER}@${HOSTNAME%%.*}" ;;
 esac
 
