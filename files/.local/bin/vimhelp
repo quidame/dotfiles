@@ -1,0 +1,2 @@
+#!/bin/sh
+exec vim -c "h ${1} | bd#"
