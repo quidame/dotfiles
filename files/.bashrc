@@ -60,12 +60,12 @@ HISTIGNORE=$'[ \t]:&:cd:ls:exit'
 # Write history in the proper file, i.e. the one belonging to the user, in ITS
 # actual HOME: the one of the sudo target, not the one of the sudo caller. This
 # could be done with the AWK external command:
-#HISTFILE="$(awk -F: -v user=${USER} '$1 == user {print $6}' /etc/passwd)/.bash_history"
+#HISTFILE="$(awk -F: -v user=${LOGNAME} '$1 == user {print $6}' /etc/passwd)/.bash_history"
 # But we don't want to depend on it to initialize the shell. Not because of awk
 # but because of external command. So this is bash pure blend:
 while read line; do
     list=( $(IFS=:; echo ${line}) )
-    [[ "${list[0]}" == "${USER}" ]] && HISTFILE="${list[5]}/.bash_history" && break
+    [[ "${list[0]}" == "${LOGNAME}" ]] && HISTFILE="${list[5]}/.bash_history" && break
 done </etc/passwd
 unset line list
 
@@ -108,14 +108,14 @@ export BASH_INITIAL_PARENT_PROCESS
 
 # TITLE_PREFIX will be the main part of PROMPT_COMMAND - the title of screen
 # and tmux tabs or windows. It is built dynamically to get a generic value...
-TITLE_PREFIX="${SUDO_USER:+${USER%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
+TITLE_PREFIX="${SUDO_USER:+${LOGNAME%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
 
 # ... and is overridden with some unconditionals
 case "${BASH_CURRENT_PARENT_PROCESS}" in
     login)
         TITLE_PREFIX= ;;
     su)
-        TITLE_PREFIX="${USER}@${HOSTNAME%%.*}" ;;
+        TITLE_PREFIX="${LOGNAME}@${HOSTNAME%%.*}" ;;
 esac
 
 
