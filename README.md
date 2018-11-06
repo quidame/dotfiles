@@ -56,13 +56,13 @@ Examples:
 ```
 ansible-playbook dotfiles.yml --tags debian
 ```
-will install settings for *bash*, *vin*, *screen*, *tmux* and *mc* (which have
+will install settings for *bash*, *vim*, *screen*, *tmux* and *mc* (which have
 their own tags too), and also *aptitude*.
 
 ```
 ansible-playbook dotfiles.yml -t required -e force_update=yes
 ```
-will install settings for *bash*, *vin*, *screen*, overwritting existing files.
+will install settings for *bash*, *vim*, *screen*, overwritting existing files.
 
 ```
 ansible-playbook dotfiles.yml -t restore
