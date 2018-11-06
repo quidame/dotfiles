@@ -1,0 +1,64 @@
+---
+#
+# General variables
+#
+
+# The directory used as skeleton home.
+dotfiles__skeleton_path: /etc/skel
+
+# Allow overwrtting dotfiles. 'force_update' is valuable for other roles.
+dotfiles__force_update: "{{ force_update | default(False) }}"
+
+
+#
+# OS specific dictlists of files to install.
+# Each dict accepts two parameters: 'path' (required) and 'mode' (optional).
+#
+
+dotfiles__list_cygwin:
+  - path: ".minttyrc"
+
+dotfiles__list_debian:
+  - path: ".aptitude/config"
+  - path: ".bash_completion.d/busybox"
+
+dotfiles__list_redhat:
+  - path: ".bash_completion.d/keytool"
+
+
+#
+# Application specific lists of files to install
+# Each dict accepts two parameters: 'path' (required) and 'mode' (optional).
+#
+
+dotfiles__list_bash:
+  - path: ".bash_aliases"
+  - path: ".bash_completion"
+  - path: ".bash_logout"
+  - path: ".bashrc"
+  - path: ".dircolors"
+  - path: ".inputrc"
+  - path: ".profile"
+
+dotfiles__list_mc:
+  - path: '.config/mc/ini'
+  - path: '.config/mc/panels.ini'
+  - path: '.config/mc/filehighlight.ini'
+  - path: '.local/share/mc/skins/cyanellow0.ini'
+  - path: '.local/share/mc/skins/cyanellow1.ini'
+  - path: '.local/share/mc/skins/cyanellow2.ini'
+
+dotfiles__list_screen:
+  - path: ".screenrc"
+
+dotfiles__list_tmux:
+  - path: ".local/bin/sssh"
+    mode: "0755"
+  - path: ".tmux.conf"
+
+dotfiles__list_vim:
+  - path: ".local/bin/vimhelp"
+    mode: "0755"
+  - path: ".vim/colors/cyanellow.vim"
+  - path: ".vim/vimrc"
+

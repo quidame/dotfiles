@@ -1,0 +1,115 @@
+---
+#
+# The purpose of this task file is to restore dotfiles from remote skeleton and
+# uninstall all other dotfiles currently supported by the role.
+#
+
+################################################################################
+# 1. Get info on the fly
+
+# Find files to be restored from /etc/skel to HOME
+- name: list skel's dotfiles
+  become: false
+  find:
+    path: "{{ dotfiles__skeleton_path }}"
+    recurse: yes
+    hidden: yes
+  register: found_skel
+
+# Find files to be removed from HOME
+- name: list home's dotfiles
+  become: false
+  find:
+    path: "{{ ansible_env.HOME }}"
+    recurse: yes
+    hidden: yes
+    use_regex: yes
+    # Restrict the search to the basenames from dotfiles__all_lists, otherwise
+    # you may experience performance issues.
+    patterns: |
+      [
+        {% for f in dotfiles__all_lists %}
+          "^{{ f|basename }}$"{{ '' if loop.last else ', ' }}
+        {% endfor %}
+      ]
+  register: found_home
+
+# As named...
+- name: rebuild lists with relative paths
+  become: false
+  set_fact:
+    skel: "{{ temp_skel }}"
+    home: "{{ temp_home | intersect(dotfiles__all_lists) }}"
+  vars:
+    temp_skel: "{{ found_skel | json_query('files[*].path') | regex_replace(dotfiles__skeleton_path + '/', '') }}"
+    temp_home: "{{ found_home | json_query('files[*].path') | regex_replace(ansible_env.HOME + '/', '') }}"
+
+
+################################################################################
+# 2. Reinstall dotfiles from skeleton
+
+- name: create subdirectories
+  become: false
+  file:
+    state: directory
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+  loop: "{{ dirs | sort | unique }}"
+  vars:
+    dirs: |
+      [
+        {% for f in skel if '/' in f|list %}
+          "{{ f|dirname }}"{{ '' if loop.last else ', ' }}
+        {% endfor %}
+      ]
+
+- name: restore default dotfiles from skeleton
+  become: false
+  copy:
+    src: "{{ dotfiles__skeleton_path }}/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/{{ item|dirname if '/' in item|list else '' }}"
+    remote_src: yes
+  loop: "{{ skel | sort }}"
+
+
+################################################################################
+# 3. Cleanup all other role's dotfiles
+
+- name: remove other dotfiles
+  become: false
+  file:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    state: absent
+  loop: "{{ home | difference(skel) | sort }}"
+  register: removed
+
+
+# Recursively remove directories if they are empty, so this task, despite the
+# 'shell' module, behaves consistently with the 'file' tasks that have been
+# played to create these directories.
+# --parents
+#   is to remove parent directories as components of the path of the directory
+#   to remove
+# --ignore-fail-on-non-empty
+#   is for parent directories, not for the one to remove, because we have
+#   already checked it is empty
+- name: remove empty directories
+  become: false
+  shell: >
+    if test -d {{ item }} && test -z $(ls -A {{ item }});
+    then rmdir -p --ignore-fail-on-non-empty {{ item }};
+    else exit 99;
+    fi
+  args:
+    chdir: "{{ ansible_env.HOME }}"
+  loop: "{{ dirs | sort | unique }}"
+  vars:
+    dirs: |
+      [
+        {% for f in home|difference(skel) if '/' in f|list %}
+          "{{ f|dirname }}"{{ '' if loop.last else ',' }}
+        {% endfor %}
+      ]
+  register: rmdir
+  changed_when: rmdir.rc == 0
+  failed_when: rmdir.rc not in [ 0, 99 ]
+

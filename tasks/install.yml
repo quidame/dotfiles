@@ -1,0 +1,25 @@
+---
+# Just create directories before copying files into them.
+- name: create subdirectories
+  become: false
+  file:
+    state: directory
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    mode: "0700"
+  loop: "{{ dirs | sort | unique }}"
+  vars:
+    dirs: |
+      [
+        {% for f in list|json_query('[*].path') if '/' in f|list %}
+          "{{ f|dirname }}"{{ '' if loop.last else ', ' }}
+        {% endfor %}
+      ]
+
+- name: "{{ name }}"
+  loop: "{{ list }}"
+  become: false
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ ansible_env.HOME }}/{{ item.path }}"
+    mode: "{{ item.mode | default(omit) }}"
+    force: "{{ dotfiles__force_update }}"

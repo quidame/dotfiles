@@ -1,0 +1,124 @@
+---
+# Does nothing if no tag is specified
+
+
+################################################################################
+#
+# Restore default configuration and remove other files/directories
+# ansible-playbook dotfiles.yml --tags restore
+#
+
+- import_tasks: restore.yml
+  tags:
+    - never
+    - restore
+
+
+################################################################################
+#
+# Install « required » dotfiles - bashrc, inputrc, vimrc, screenrc, and more
+# ansible-playbook dotfiles.yml --tags required
+#
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Bash"
+    list: "{{ dotfiles__list_bash }}"
+  tags:
+    - never
+    - cygwin
+    - debian
+    - redhat
+    - dotfiles
+    - required
+    - bash
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Vim"
+    list: "{{ dotfiles__list_vim }}"
+  tags:
+    - never
+    - cygwin
+    - debian
+    - redhat
+    - dotfiles
+    - required
+    - vim
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Screen"
+    list: "{{ dotfiles__list_screen }}"
+  tags:
+    - never
+    - cygwin
+    - debian
+    - redhat
+    - dotfiles
+    - required
+    - screen
+
+
+################################################################################
+#
+# Install « optional » dotfiles
+# ansible-playbook dotfiles.yml --tags optional
+#
+
+
+- import_tasks: install.yml
+  vars:
+    name: "configure TMux"
+    list: "{{ dotfiles__list_tmux }}"
+  tags:
+    - never
+    - cygwin
+    - debian
+    - dotfiles
+    - optional
+    - tmux
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Midnight Commander"
+    list: "{{ dotfiles__list_mc }}"
+  tags:
+    - never
+    - cygwin
+    - debian
+    - dotfiles
+    - optional
+    - mc
+
+
+################################################################################
+#
+# Install OS-specific stuff
+# ansible-playbook dotfiles.yml --tags debian
+#
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Cygwin tools"
+    list: "{{ dotfiles__list_cygwin }}"
+  tags:
+    - never
+    - cygwin
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Debian tools"
+    list: "{{ dotfiles__list_debian }}"
+  tags:
+    - never
+    - debian
+
+- import_tasks: install.yml
+  vars:
+    name: "configure Redhat tools"
+    list: "{{ dotfiles__list_redhat }}"
+  tags:
+    - never
+    - redhat
+

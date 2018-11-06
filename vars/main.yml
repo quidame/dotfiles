@@ -1,0 +1,17 @@
+---
+# This variable is used by the 'restore' tasks. It lists all dotfiles of the
+# role. As this is for deleting listed files, we remap the dictlist to a flat
+# list of paths.
+dotfiles__all_lists: |
+  {{ (
+    dotfiles__list_cygwin +
+    dotfiles__list_debian +
+    dotfiles__list_redhat +
+    dotfiles__list_bash   +
+    dotfiles__list_vim    +
+    dotfiles__list_screen +
+    dotfiles__list_tmux   +
+    dotfiles__list_mc     +
+    []
+    ) | json_query('[*].path')
+  }}
