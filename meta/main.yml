@@ -1,0 +1,32 @@
+galaxy_info:
+  author: quidame
+  description: deploy dotfiles with Cyanellow color theme
+
+  license: GPLv3
+
+  min_ansible_version: 2.5
+
+  platforms:
+  - name: Debian
+    versions:
+    - 9
+    - 10
+  - name: Redhat
+    versions:
+    - 7
+
+  galaxy_tags:
+    - restore
+    - cygwin
+    - debian
+    - redhat
+    - dotfiles
+    - required
+    - optional
+    - bash
+    - vim
+    - screen
+    - tmux
+    - mc
+
+dependencies: []
