@@ -60,12 +60,20 @@ HISTIGNORE=$'[ \t]:&:cd:ls:exit'
 # Write history in the proper file, i.e. the one belonging to the user, in ITS
 # actual HOME: the one of the sudo target, not the one of the sudo caller. This
 # could be done with the AWK external command:
-#HISTFILE="$(awk -F: -v user=${LOGNAME} '$1 == user {print $6}' /etc/passwd)/.bash_history"
+#HISTFILE="$(awk -F: -v user=$(id -un) '$1 == user {print $6}' /etc/passwd)/.bash_history"
 # But we don't want to depend on it to initialize the shell. Not because of awk
-# but because of external command. So this is bash pure blend:
+# but because of external command. So this is bash pure blend. And why to rely
+# on USERNAME instead of USER or LOGNAME ?
+# - on Debian, USERNAME is set by sudo to be the effective user
+# - on Redhat servers I'm working on, USERNAME is always set, as LOGNAME and
+#   USER, and it always refers to the effective user, while USER and LOGNAME
+#   are kept by sudo and then have the same value than SUDO_USER.
+# Anyway, the only one reason to do that is for the case HOME is exported in
+# sudo environment.
+[[ "${SUDO_USER}" ]] &&
 while read line; do
     list=( $(IFS=:; echo ${line}) )
-    [[ "${list[0]}" == "${LOGNAME}" ]] && HISTFILE="${list[5]}/.bash_history" && break
+    [[ "${list[0]}" == "${USERNAME}" ]] && HISTFILE="${list[5]}/.bash_history" && break
 done </etc/passwd
 unset line list
 
@@ -108,7 +116,7 @@ export BASH_INITIAL_PARENT_PROCESS
 
 # TITLE_PREFIX will be the main part of PROMPT_COMMAND - the title of screen
 # and tmux tabs or windows. It is built dynamically to get a generic value...
-TITLE_PREFIX="${SUDO_USER:+${LOGNAME%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
+TITLE_PREFIX="${SUDO_USER:+${USERNAME%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
 
 # ... and is overridden with some unconditionals
 case "${BASH_CURRENT_PARENT_PROCESS}" in
