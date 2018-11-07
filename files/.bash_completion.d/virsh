@@ -1,15 +1,24 @@
 # Bash Completion snippet for the virsh command
 #
 # Before installing this file on your system, ensure you can access your
-# hypervisor without to have to type a password.
+# hypervisor without to have to type a password.  Accessing it over ssh may be
+# at no cost on a LAN with an ssh agent and a persistent control socket enabled
+# on the client side.  In ~/.ssh/config, add the following options to the
+# related hosts:
+### ControlMaster auto
+### ControlPersist yes
+# This will help a lot to complete object names (guests to start/destroy or
+# storages to resize, pool names, interfaces and networks to edit, etc) as this
+# completion script may request the server for each completion attempt.
 
 have virsh &&
 _virsh() {
 
     local cur prev opts i connect
-    __name() { awk '{print $1}'; }
+    alias -- --name="awk '{print \$1}'"
 
-    # find all really available applets (builtins or internal commands)
+    # find all currently available applets (builtins or internal commands).
+    # This is very responsive on my 6 years laptop.
     local def_uri="test:///default qemu:///session qemu:///system lxc:/// xen:///"
     local options=$(virsh --help | grep -woEe '-[a-zA-Z]|--[a-z]+[-a-z]*')
     local commands=$(virsh help | awk '/^    / {print $1}')
@@ -39,6 +48,7 @@ _virsh() {
                 fi
             done
             COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+            unalias -- --name
             return 0
             ;;
     esac
@@ -67,11 +77,11 @@ _virsh() {
             opts="$(virsh -q $connect list 2>/dev/null --name)" ;;
 
         --interface|iface-autostart|iface-dumpxml|iface-edit|iface-mac)
-            opts="$(virsh -q $connect iface-list 2>/dev/null --all | __name)" ;;
+            opts="$(virsh -q $connect iface-list 2>/dev/null --all | --name)" ;;
         iface-start|iface-undefine)
-            opts="$(virsh -q $connect iface-list 2>/dev/null --inactive | __name)" ;;
+            opts="$(virsh -q $connect iface-list 2>/dev/null --inactive | --name)" ;;
         iface-destroy)
-            opts="$(virsh -q $connect iface-list 2>/dev/null | __name)" ;;
+            opts="$(virsh -q $connect iface-list 2>/dev/null | --name)" ;;
 
         --network|net-autostart|net-dumpxml|net-edit|net-info)
             opts="$(virsh -q $connect net-list 2>/dev/null --name --all)" ;;
@@ -81,11 +91,11 @@ _virsh() {
             opts="$(virsh -q $connect net-list 2>/dev/null --name)" ;;
 
         --pool|pool-autostart|pool-dumpxml|pool-edit|pool-info)
-            opts="$(virsh -q $connect pool-list 2>/dev/null --all | __name)" ;;
+            opts="$(virsh -q $connect pool-list 2>/dev/null --all | --name)" ;;
         pool-start|pool-undefine)
-            opts="$(virsh -q $connect pool-list 2>/dev/null --inactive | __name)" ;;
+            opts="$(virsh -q $connect pool-list 2>/dev/null --inactive | --name)" ;;
         pool-destroy)
-            opts="$(virsh -q $connect pool-list 2>/dev/null | __name)" ;;
+            opts="$(virsh -q $connect pool-list 2>/dev/null | --name)" ;;
 
         -c|--connect|connect)
             opts="$(virsh -q $connect uri) $def_uri" ;;
@@ -95,6 +105,7 @@ _virsh() {
     esac
 
     COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+    unalias -- --name
     return 0
 }
 
