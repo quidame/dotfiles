@@ -35,10 +35,10 @@ dotfiles__list_bash:
   - path: ".bash_aliases"
   - path: ".bash_completion"
   - path: ".bash_logout"
+  - path: ".bash_profile"
   - path: ".bashrc"
   - path: ".dircolors"
   - path: ".inputrc"
-  - path: ".profile"
 
 dotfiles__list_mc:
   - path: '.config/mc/ini'
