@@ -73,7 +73,7 @@ the role.
 
 ## Requirements
 
-None.
+The `jmespath` python module must be installed on the ansible controller.
 
 
 ## Role Variables
