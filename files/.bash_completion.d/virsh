@@ -18,7 +18,7 @@ _virsh() {
     alias -- --name="awk '{print \$1}'"
 
     # find all currently available applets (builtins or internal commands).
-    # This is very responsive on my 6 years laptop.
+    # This is very responsive on my 7 years old laptop.
     local def_uri="test:///default qemu:///session qemu:///system lxc:/// xen:///"
     local options=$(virsh --help | grep -woEe '-[a-zA-Z]|--[a-z]+[-a-z]*')
     local commands=$(virsh help | awk '/^    / {print $1}')
@@ -71,7 +71,7 @@ _virsh() {
             opts="$(virsh -q $connect list 2>/dev/null --name --inactive)" ;;
         resume)
             opts="$(virsh -q $connect list 2>/dev/null --name --state-paused)" ;;
-        suspend)
+        suspend|reboot)
             opts="$(virsh -q $connect list 2>/dev/null --name --state-running)" ;;
         destroy)
             opts="$(virsh -q $connect list 2>/dev/null --name)" ;;
