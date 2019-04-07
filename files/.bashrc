@@ -48,7 +48,7 @@ eval export $(locale)
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
 # Or even extend the list of patterns to not track in history.
-HISTIGNORE=$'[ \t]:&:cd:ls:exit'
+HISTIGNORE=$'#*:&:cd:ls:exit'
 
 # No size limit. This may be overridden by readline variable 'history-size'
 # in inputrc. As documented, '-1' means 'no limit' on Debian, but this is
