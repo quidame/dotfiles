@@ -21,7 +21,7 @@
 ################################################################################
 # Each distro may provide its own set of shell-init files, as /etc/profile and
 # /etc/skel/.profile among others. On Redhat, system-wide bashrc is loaded from
-# user(s .bashrc.
+# user's .bashrc.
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
