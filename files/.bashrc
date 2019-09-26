@@ -21,7 +21,8 @@
 ################################################################################
 # Each distro may provide its own set of shell-init files, as /etc/profile and
 # /etc/skel/.profile among others. On Redhat, system-wide bashrc is loaded from
-# user's .bashrc.
+# user's .bashrc. Debian doesn't provide this file, but /etc/bash.bashrc instead
+# (that is loaded from /etc/profile).
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
@@ -45,7 +46,7 @@ eval export $(locale)
 
 
 ################################################################################
-# Don't put duplicate lines or lines starting with space in the history.
+# Don't put duplicate lines nor lines starting with space in the history.
 HISTCONTROL=ignoreboth
 # Or even extend the list of patterns to not track in history.
 HISTIGNORE=$'#*:&:cd:ls:exit'
@@ -53,27 +54,30 @@ HISTIGNORE=$'#*:&:cd:ls:exit'
 # No size limit. This may be overridden by readline variable 'history-size'
 # in inputrc. As documented, '-1' means 'no limit' on Debian, but this is
 # not the case on Redhat. Luckily, set history-size inputrc variable to "-1"
-# is working for both.
+# is working for both. NOTE that it could be done right here with:
+#bind 'set history-size -1'
+# but putting this setting in the right place will make it available for
+# other applications (as gpg). So... nothing to do here.
 #HISTSIZE=-1
 #HISTFILESIZE=-1
 
+
+################################################################################
 # Write history in the proper file, i.e. the one belonging to the user, in ITS
-# actual HOME: the one of the sudo target, not the one of the sudo caller. This
-# could be done with the AWK external command:
-#HISTFILE="$(awk -F: -v user=$(id -un) '$1 == user {print $6}' /etc/passwd)/.bash_history"
-# But we don't want to depend on it to initialize the shell. Not because of awk
-# but because of external command. So this is bash pure blend. And why to rely
-# on USERNAME instead of USER or LOGNAME ?
-# - on Debian, USERNAME is set by sudo to be the effective user
-# - on Redhat servers I'm working on, USERNAME is always set, as LOGNAME and
-#   USER, and it always refers to the effective user, while USER and LOGNAME
-#   are kept by sudo and then have the same value than SUDO_USER.
+# actual HOME: the one of the sudo target, not the one of the sudo caller. But
+# why the call to an external command, and not variables such as USERNAME,
+# USER or LOGNAME ?
+# - on Debian, USERNAME is not set. and USER and LOGNAME are set to the
+#   effective user (the sudo target).
+# - on Redhat servers I'm working on, USERNAME, USER and LOGNAME are set but
+#   get the same value than SUDO_USER, i.e. the sudo caller.
 # Anyway, the only one reason to do that is for the case HOME is exported in
-# sudo environment.
+# sudo environment (to still use the same dotfiles - .vimrc, .screenrc and so
+# on, without polluting root account, which may be shared by plenty of admins).
 [[ "${SUDO_USER}" ]] &&
 while read line; do
     list=( $(IFS=:; echo ${line}) )
-    [[ "${list[0]}" == "${USERNAME}" ]] && HISTFILE="${list[5]}/.bash_history" && break
+    [[ "${list[0]}" == "$(id -un)" ]] && HISTFILE="${list[5]}/.bash_history" && break
 done </etc/passwd
 unset line list
 
@@ -116,7 +120,7 @@ export BASH_INITIAL_PARENT_PROCESS
 
 # TITLE_PREFIX will be the main part of PROMPT_COMMAND - the title of screen
 # and tmux tabs or windows. It is built dynamically to get a generic value...
-TITLE_PREFIX="${SUDO_USER:+${USERNAME%${SUDO_USER}}}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
+TITLE_PREFIX="${SUDO_USER:+$(id -un)}${SSH_CONNECTION:+@${HOSTNAME%%.*}}"
 
 # ... and is overridden with some unconditionals
 case "${BASH_CURRENT_PARENT_PROCESS}" in
