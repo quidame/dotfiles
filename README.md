@@ -25,12 +25,12 @@ terminal-based toolbox. For examples:
   of the program running in the window. This is achieved by sending them the
   proper escape sequences from **Bash**.
 
-- **Aplitude UI** and **MC** use a similar colorscheme for their frames and
+- **Aptitude UI** and **MC** use a similar colorscheme for their frames and
   dropdown menus.
 
 These files have been built to work on both
 
-- **Debian** 9 systems (local and remote)
+- **Debian** 9/10 systems (local and remote)
 - **Redhat** 7 systems (remote, accessed from Cygwin)
 - **Cygwin** environment (local)
 
@@ -43,13 +43,13 @@ than on Debian clients to admin Debian servers.
 As the dotfiles stand in the same directory, they could be deployed on a single
 host with a command as simple as `rsync` or `scp`, and this would be done. But
 to deploy only a subset of these dotfiles on several dozens of servers, it will
-be very compliacted to not reinvent the wheel.
+be very complicated to not reinvent the wheel.
 
 Apart the ones shipped with the dotfiles themselves, this ansible role provides
 the following features:
 
 - tag-controlled deployment of sets or subsets of dotfiles
-- ablitity to restore default dotfiles from host's home skeleton
+- ability to restore default dotfiles from host's home skeleton
 
 Examples:
 
