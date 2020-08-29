@@ -32,7 +32,7 @@ _keytool() {
     done
 
     case "$prev" in
-        #-certreq|-changealias|-delete|-exportcert|-genkeypair|-genseckey|-gencert|-importcert|-importpass|-importkeystore|-keypasswd|-list|-printcert|-printcertr)
+        #-certreq|-changealias|-delete|-exportcert|-genkeypair|-genseckey|-gencert|-importcert|-importpass|-importkeystore|-keypasswd|-list|-printcert|-printcertreq|-printcrl|-storepasswd)
         #    opts="$(_keytool_options $prev)"
         #    COMPREPLY=( $(compgen -W "-help $opts" -- "$cur") )
         #    return 0
